@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h2><i>Login Form</i></h2>
+    <form action="/login" method="POST"onsubmit="return validation()">
+      <label for="name">Email:</label><br>
+      <input type="text"  name="email" value=""id="email"><br><br>
+      <span id="firstError" class="text-danger font-weight bold"></span><br><br>
+
+      <label for="email">Password:</label><br>
+      <input type="text"  name="password" value=""id="password"><br><br>
+      <span id="passError" class="text-danger font-weight bold"></span><br><br>
+
+      <button type="submit">Login</button>
+        <a class="nav-link active" aria-current="page"href="/register">Register</a>
+      <br><br>
+
+<script type="text/javascript">
+function validation(){
+  var email=document.getElementById('email').value;
+  var password=document.getElementById('password').value;
+
+  if(email == ""){
+        document.getElementById('firstError').innerHTML="please fill data properly"
+        return false;
+      }
+      if(password == ""){
+        document.getElementById('passError').innerHTML="please fill data properly"
+        return false;
+      }
+}
+
+</script> -->
+
+</body>
+</html>
