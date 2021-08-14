@@ -19,125 +19,97 @@
     <h1><i>Student Registration Form</i></h1>
            
         
-    <form action="/register" method="POST" onsubmit="return validation()">
-      <label for="name">name:</label><br>
-      <input type="text"  name="fname" value="" id="fname">
+    <form id="myForm">
+      <label for="name">First name:</label><br>
+      <input type="text" name="fname" value="" id="fname">
       <span id="nameError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="lastname">lastname:</label><br>
-      <input type="text"  name="lastname" value=""id="lastname"><br><br>
-      <span id="lastError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="email">email:</label><br>
-      <input type="text"  name="email" value=""id="email"><br><br>
-      <span id="emailError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="phone">phone:</label><br>
-      <input type="text"  name="phone" value="" id="phone"><br><br>
-      <span id="phoneError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="address">address:</label><br>
-      <input type="text"  name="address" value="" id="address"><br><br>
-      <span id="addressError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="password">password:</label><br>
-      <input type="text"  name="password" value="" id="password"><br><br>
-      <span id="passError" class="text-danger font-weight bold"></span><br><br>
-
-      <label for="confirmpassword">confirmpassword:</label><br>
-      <input type="text"  name="confirmpassword" value="" id="confirmpassword"><br><br>
-      <span id="passwordError" class="text-danger font-weight bold"></span><br><br>
-
-      <input type="radio" name="gender" value="male"> Male
-      <input type="radio" name="gender" value="female"> Female
-      <input type="radio" name="gender" value="other"> Other <br><br>
-      <input type="submit" value="Register">
      
+      <label for="lastname">Last name:</label><br>
+      <input type="text"  name="lastname" value="" id="lastname">
+      <br><br>
+      <span id="lastError" class="text-danger font-weight bold"></span><br>
+
+      <label for="email">Email:</label><br>
+      <input type="text"  name="email" value="" id="email"><br><br>
+      <span id="emailError" class="text-danger font-weight bold"></span><br>
+      
+      <label for="password">password:</label><br>
+      <input type="password"  name="password" value="" id="password"><br><br>
+      <span id="passError" class="text-danger font-weight bold"></span><br>
+      
+      <label for="confirmpassword">confirmpassword:</label><br>
+      <input type="password"  name="confirmpassword" value="" id="confirmpassword"><br><br>
+      <span id="passwordError" class="text-danger font-weight bold"></span><br><br>
+      
+      <button type="button"  onclick="loadDoc()" >Register</button>
       <a class="nav-link active" aria-current="page"href="/">Login</a>
-    </form> <br><br>
-    </div>
+    </form> 
     
     <script type="text/javascript">
-    function validation(){
-      var name=document.getElementById('fname').value;
-      var lastname=document.getElementById('lastname').value;
-      var email=document.getElementById('email').value;
-      var phone=document.getElementById('phone').value;
-      var address=document.getElementById('address').value;
-      var password=document.getElementById('password').value;
-      var confirmpassword=document.getElementById('confirmpassword').value;
-
-      if(name == null || name == ""){
-        alert("name can't be blanked");
-        document.getElementById('nameError').innerHTML="please fill data properly"
-        return false;
-      }
-      if(lastname == null || lastname ==""){
-        alert("Last name filled required");
-        document.getElementById('lastError').innerHTML="Please fill last name"
-        return false; 
-      }
-   if(email ==""){
-        document.getElementById('emailError').innerHTML="Please fill email"
-        return false; 
-      }
-      if(email.indexof('@')<= 0){
-document.getElementById("emailError").innerHTML="invalid email"
-return false;
-      }
-      if((email.cahrAt(emails.length-4)!='.')&&(emails.cahrAt(emails.length-3)!='.')){
-        document.getElementById("emailError").innerHTML = "invalid email"
-        return false;
-      }
-
-      if(phone ==""){
-        document.getElementById('phoneError').innerHTML="Please fill phone number"
-        return false;
-      }
-if(isNaN(phone)){
-  document.getElementById('phoneError').innerHTML="only characters";
-  return false;
-}
-if(phone.length!=10){
-  document.getElementById('phoneError').innerHtml="only 10 characters"
-  return false;
-}
-
-
-
-      if(address == null || address ==""){
-        alert("Address filed required");
-        document.getElementById('addressError').innerHTML="Please fill address"
-        return false;
-      }
-      if(password ==""){
-        document.getElementById('passError').innerHTML="Please fill password"
-        return false;
-      }
-      function matchPass(){
-        if(password == confirmpassword){
-          return true;
-        }
-        else{
-          ("password must be same")
+      function validation(){
+        var name=document.getElementById('fname').value;
+        var lastname=document.getElementById('lastname').value;
+        var email=document.getElementById('email').value;
+        var password=document.getElementById('password').value;
+        var confirmpassword=document.getElementById('confirmpassword').value;
+        var emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        
+        if(name == null || name == ""){
+          // alert("name can't be blanked");
+          document.getElementById('nameError').innerHTML="please fill data properly"
           return false;
+        } else if(lastname == null || lastname =="") {
+          document.getElementById('nameError').innerHTML="";
+          document.getElementById('lastError').innerHTML="Please fill last name"
+          return false; 
+        }else if(email ==""){
+          document.getElementById('lastError').innerHTML=""
+          document.getElementById('emailError').innerHTML="Please fill email"
+          return false; 
+        } else if(!emailformat.test(email)){
+          document.getElementById("emailError").innerHTML="Email is not correct";
+          return false;
+        } else if(password ==""){
+          document.getElementById("emailError").innerHTML=""
+          document.getElementById('passError').innerHTML="Please fill password"
+          return false;
+        } else if(confirmpassword ==""){
+          document.getElementById('passError').innerHTML=""
+          document.getElementById('passwordError').innerHTML="Please fill confirm password."
+          return false;
+        }else if(password!==confirmpassword){
+            document.getElementById("passwordError").innerHTML="Password and confirm password not same."
+            return false;
+        }else{
+          document.getElementById('passwordError').innerHTML="";
+          return true
         }
       }
-      
 
-    //  return false
-    }
- 
-      
-   
+      function loadDoc(){
+        var params = {
+            'fname':fname.value,
+            'lastname':lastname.value,
+            'email':email.value,
+            'password':password.value
+        }
+  console.log(params);
   
-   
+        if(validation() === true) {
+          const  xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function(){
+            if(this.status ===200){
+              document.getElementById("myForm") = this.responseText;
+            }
+          };
+          xhttp.open("POST","/register",true);
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhttp.send(`data=${JSON.stringify(params)}`)
+        } else {
+          validation();
+        }
+      };
 
-
-    
     </script>
-    
-    
-    
   </body>
 </html>

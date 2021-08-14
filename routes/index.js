@@ -1,7 +1,7 @@
-const { Router } = require('express');
 var express = require('express');
 var router = express.Router();
 var studentSchema = require("../models/student");
+const crypto = require('crypto');
 
 //  GET home page. 
 router.get('/', function(req, res, next) {
@@ -16,77 +16,82 @@ router.get('/register',(req, res) => {
 
 router.post("/register",async(req,res)=>{
   try{
-    // console.log(req.body)
-    // return
-    
-    let password = req.body.password;
-    let cpassword = req.body.confirmpassword;
-    
-    if(password === cpassword){
-      
+  let data = JSON.parse(req.body.data);
+    var email = data.email;
+    var emailCheck = await studentSchema.findOne({email:email});
+    console.log(emailCheck);
+    if(emailCheck){
+      res.status(200).json({"message":"Email already exists."});
+    } else {
+      let encryptedPassword = encrypt(data.password);
+      // const decipher = crypto.createDecipher('aes192','a password');
+      // decrypted = decipher.update(encrypted,'hex','utf8');
+      // decrypted += decipher.final('utf8');
+      // console.log("decrypted : ",decrypted);
+      return
+
       let registerStudent = {
-        name:req.body.fname,
-        lastname:req.body.lastname,
-        email:req.body.email,
-        gender:req.body.gender,
-        phone:req.body.phone,
-        address:req.body.address,
-        password:req.body.password,
-        confirmpassword:req.body.confirmpassword,
+        name:data.fname,
+        lastname:data.lastname,
+        email:data.email,
+        password:data.password,
       }
-      console.log("register : ", registerStudent);
+      console.log("register",registerStudent)
       let registered = await studentSchema.create(registerStudent);
       console.log("registered : ", registered);
-      // res.render('index', { title: 'Express' });
       res.status(200).json(registered);
-    }else{
-      res.send("password not match")
     }
-  }catch(error){
-    console.log(error);
-    res.status(400).send(error);
-  }
+     }catch(error){
+     console.log(error);
+     res.status(401).send(error);
+     }
+
 });
+
 
 // Get request login
 router.post("/login",async(req,res)=>{
   try{
-    const email = req.body.email;
-    const password = req.body.password;
+    var email = req.body.email;
+    var password = req.body.password;
 
-    const useremail = await studentSchema.findOne({email:email});
-    console.log(useremail);
-   
-    res.status(200).send("Successfully login")
+    var checkEmail = await studentSchema.findOne({email:email});
+    if(checkEmail) {
+      if(password === checkEmail.password) {
+        req.session.email = email
+        req.session.userId = checkEmail._id
+        console.log(req.session);
+        res.status(200).send("Login successfully.")
 
-// if(useremail.password === password){
 
-// }else{
-//   res.send("Invalid credentials")
-// };
-    // console.log(`${email}and password is ${password}`)
+      } else {
+        res.send("Password not matched.")
+      }
+      // res.redirect("/users");
+    }
   }catch(error){
+    console.log(error)
     res.status(400).send("invalid credentials")
   }
 });
 
 // PATCH request update the student with id 
-router.patch("/students/:id",async(req,res)=>{
-    try{
-        const _id = req.params.id;
-        // let email = req.body.Email
-        // let data = {
-        //     email : req.body.Email
-        // }
-        const updateStudents = await student.findByIdAndUpdate(_id,req.body,{
-            new:true
-        });
-        console.log(updateStudents);
-        res.send(updateStudents);
-    }catch(e){
-        res.status(400).send(e);
-    }
-});
+// router.patch("/students/:id",async(req,res)=>{
+//     try{
+//         const _id = req.params.id;
+//         // let email = req.body.Email
+//         // let data = {
+//         //     email : req.body.Email
+//         // }
+//         const updateStudents = await student.findByIdAndUpdate(_id,req.body,{
+//             new:true
+//         });
+//         console.log(updateStudents);
+//         res.send(updateStudents);
+//     }catch(e){
+//         res.status(400).send(e);
+//     }
+// });
 
 // // Delete request 
 
@@ -103,3 +108,11 @@ router.delete("/students/:id",async(req,res)=>{
 });
 
 module.exports = router;
+
+
+function encrypt(password) {
+  const cipher = crypto.createCipher('aes192','a password');
+  var encrypted = cipher.update(password,'utf8','hex');
+  encrypted += cipher.final('hex');
+  return encrypted
+}

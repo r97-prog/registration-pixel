@@ -1,6 +1,12 @@
 var mongoose= require("mongoose");
 
-mongoose.connect("mongodb+srv://rishabh:gorzR3libdIegmmh@cluster0.cvk4k.mongodb.net/rishabh",{
+const mongoURI = "mongodb+srv://rishabh:gorzR3libdIegmmh@cluster0.cvk4k.mongodb.net/rishabh"
+// const store = new mongoDBSession({
+//     uri:mongoURI,
+//     collection:"firstsession",
+//   });
+
+mongoose.connect(mongoURI,{
     useCreateIndex:true,
     useNewUrlParser:true,
     useUnifiedTopology:true,

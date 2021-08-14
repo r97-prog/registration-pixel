@@ -3,12 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
+var session = require('express-session');
+// const bcrypt = require('bcrypt');
+const crypto = require ('crypto')
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var Database = require('./db/connection');
-var models = require('./models/student');
+var connection = require("./db/connection");
+
 var app = express();
 
 // view engine setup
@@ -20,6 +23,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret:"testApp",
+  resave:true,
+  saveUninitialized:true,
+  cookie: { secure : true}
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
